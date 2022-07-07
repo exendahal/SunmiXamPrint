@@ -1,6 +1,7 @@
 ﻿using SunmiXamPrint.Interfaces;
 using System;
 using System.Linq;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace SunmiXamPrint
@@ -13,27 +14,31 @@ namespace SunmiXamPrint
         }
         private async void selectPrinterButton_Clicked(object sender, EventArgs e)
         {
-            if (DependencyService.Get<IBluetoothPrinterService>().IsBluetoothEnabled())
+            if (DeviceInfo.Platform.ToString() == "Android")
             {
-                var devices = DependencyService.Get<IBluetoothPrinterService>().GetAvailableDevices();
-                if (devices != null && devices.Count > 0)
+                if (DependencyService.Get<IBluetoothPrinterService>().IsBluetoothEnabled())
                 {
-                    var choices = devices.Select(d => d.Title).ToArray();
-                    string action = await Application.Current.MainPage.DisplayActionSheet("Select printer device.", "Cancel", null, choices);
-                    if (choices.Contains(action))
+                    var devices = DependencyService.Get<IBluetoothPrinterService>().GetAvailableDevices();
+                    if (devices != null && devices.Count > 0)
                     {
-                        SelectDevice(action);
+                        var choices = devices.Select(d => d.Title).ToArray();
+                        string action = await Application.Current.MainPage.DisplayActionSheet("Select printer device.", "Cancel", null, choices);
+                        if (choices.Contains(action))
+                        {
+                            SelectDevice(action);
+                        }
+                    }
+                    else
+                    {
+                        await DisplayAlert("Select Printer", "No device.", "OK");
                     }
                 }
                 else
                 {
-                    await DisplayAlert("Select Printer", "No device.", "OK");
+                    await DisplayAlert("No bluetooth", "Please turn bluetooth on", "OK");
                 }
             }
-            else
-            {
-                await DisplayAlert("No bluetooth", "Please turn bluetooth on", "OK");
-            }
+            
             
         }
 
