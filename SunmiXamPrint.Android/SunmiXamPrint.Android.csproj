@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
+    <Reference Include="SunmiV2">
+      <HintPath>..\..\..\..\Downloads\SunmiV2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +63,7 @@
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="Printer.cs" />
+    <Compile Include="BlueToothPrinterService.cs" />
     <Compile Include="PrinterService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
