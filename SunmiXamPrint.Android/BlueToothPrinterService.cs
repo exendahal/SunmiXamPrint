@@ -65,28 +65,35 @@ namespace SunmiXamPrint.Droid
             }
             return false;
         }
-        public void PrintQR(string content)
-        {
-            SendCommandToPrinter(ContentType.TextContentType.Qr, content, _connectedDevice);
-        }
-
-        public void PrintText(string content, ContentType.TextContentType type)
-        {
-            SendCommandToPrinter(type, content, _connectedDevice);
-        }
-        async void SendCommandToPrinter(ContentType.TextContentType type, string content, BluetoothDevice device)
+        public async void PrintQR(string content)
         {
             if (string.IsNullOrEmpty(content)) return;
             Printer print = new Printer();
-            if (device != null)
+
+            if (_connectedDevice != null)
             {
-                await print.Print(type, content, device);
+                await print.PrintQR(content, _connectedDevice);
             }
             else
             {
                 throw new Exception("No selected device.");
             }
         }
+
+        public async void PrintText(byte[] data)
+        {
+            if (data == null) return;
+            Printer print = new Printer();
+
+            if (_connectedDevice != null)
+            {
+                await print.PrintText(data, _connectedDevice);
+            }
+            else
+            {
+                throw new Exception("No selected device.");
+            }
+        }        
         public bool IsBluetoothEnabled()
         {
             BluetoothManager bluetoothManager = (BluetoothManager)currentContext.GetSystemService(Context.BluetoothService);

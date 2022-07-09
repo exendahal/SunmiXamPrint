@@ -1,9 +1,10 @@
-﻿using SunmiXamPrint.Interfaces;
+﻿using ESCPOS_NET.Emitters;
+using ESCPOS_NET.Utilities;
+using SunmiXamPrint.Interfaces;
 using System;
 using System.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using static SunmiXamPrint.Model.ContentType;
 
 namespace SunmiXamPrint
 {
@@ -48,10 +49,21 @@ namespace SunmiXamPrint
             DependencyService.Get<IBluetoothPrinterService>().PrintQR(printBox.Text);
         }
 
-        private void printTextButton_Clicked(object sender, EventArgs e)
+        private void printTextButton_Clicked(object sender, EventArgs args)
         {
-            DependencyService.Get<IBluetoothPrinterService>().PrintText("RECIPT EXAMPLE\n", TextContentType.Bold);
-            DependencyService.Get<IBluetoothPrinterService>().PrintText("ADDRESS 1\nADDRESS 2\n--------------------------\n", TextContentType.Plain);
+            var e = new EPSON();
+            var buffer = ByteSplicer.Combine(
+                e.CenterAlign(),
+                e.SetStyles(PrintStyle.Bold),
+                e.PrintLine("Bio Care Premium"),
+                e.SetStyles(PrintStyle.None),
+                e.CenterAlign(),
+                e.PrintLine("Address : Sankhamul,Kathmandu"),
+                e.PrintLine("Mobile: 9800000000"),
+                e.PrintLine("...........................")
+                );
+
+            DependencyService.Get<IBluetoothPrinterService>().PrintText(buffer);           
         }
 
         void SelectDevice(string printerName)
