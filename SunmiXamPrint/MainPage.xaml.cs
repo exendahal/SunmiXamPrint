@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using static SunmiXamPrint.Model.ContentType;
 
 namespace SunmiXamPrint
 {
@@ -49,7 +50,8 @@ namespace SunmiXamPrint
 
         private void printTextButton_Clicked(object sender, EventArgs e)
         {
-            DependencyService.Get<IBluetoothPrinterService>().PrintText(printBox.Text);
+            DependencyService.Get<IBluetoothPrinterService>().PrintText("RECIPT EXAMPLE\n", TextContentType.Bold);
+            DependencyService.Get<IBluetoothPrinterService>().PrintText("ADDRESS 1\nADDRESS 2\n--------------------------\n", TextContentType.Plain);
         }
 
         void SelectDevice(string printerName)

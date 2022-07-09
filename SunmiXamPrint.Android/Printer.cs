@@ -1,14 +1,17 @@
 ﻿using Android.Bluetooth;
+using Com.Sunmi.Peripheral.Printer;
 using Java.Util;
+using SunmiXamPrint.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static SunmiXamPrint.Model.ContentType;
 
 namespace SunmiXamPrint.Droid
 {
     public class Printer
     {
-        public async Task Print(string type, string content, BluetoothDevice device)
+        public async Task Print(TextContentType type, string content, BluetoothDevice device)
         {
             try
             {
@@ -18,7 +21,7 @@ namespace SunmiXamPrint.Droid
                     await socket.ConnectAsync();
                     switch (type)
                     {
-                        case "qr":
+                        case TextContentType.Qr:
                             // Center content
                             await socket.OutputStream.WriteAsync(new byte[] { 0x1B, 0x61, 0x01 }, 0, 3);
                             // Write content
@@ -37,12 +40,30 @@ namespace SunmiXamPrint.Droid
                             await socket.OutputStream.WriteAsync(bytes.ToArray(), 0, bytes.Count);
                             break;
 
+                        case TextContentType.Bold:
+                            // Center content
+                            await socket.OutputStream.WriteAsync(new byte[] { 0x1B, 0x45, 0x01 }, 0, 3);
+                            // Write content.
+                            byte[] boldMessageBytes = System.Text.Encoding.ASCII.GetBytes(content);
+                            await socket.OutputStream.WriteAsync(boldMessageBytes, 0, boldMessageBytes.Length);
+                            socket.OutputStream.WriteByte(0x0A); // LF                             
+                            break;
+
+                        case TextContentType.Plain:
+                            // Center content
+                            await socket.OutputStream.WriteAsync(new byte[] { 0x1B, 0x45, 0x00 }, 0, 3);
+                            // Write content.
+                            byte[] plainDefmessageBytes = System.Text.Encoding.ASCII.GetBytes(content);
+                            await socket.OutputStream.WriteAsync(plainDefmessageBytes, 0, plainDefmessageBytes.Length);
+                            socket.OutputStream.WriteByte(0x0A); // LF 
+                            break;
+
                         default:
                             // Center content
                             await socket.OutputStream.WriteAsync(new byte[] { 0x1B, 0x61, 0x01 }, 0, 3);
                             // Write content.
-                            byte[] messageBytes = System.Text.Encoding.ASCII.GetBytes(content);
-                            await socket.OutputStream.WriteAsync(messageBytes, 0, messageBytes.Length);
+                            byte[] defmessageBytes = System.Text.Encoding.ASCII.GetBytes(content);
+                            await socket.OutputStream.WriteAsync(defmessageBytes, 0, defmessageBytes.Length);
                             socket.OutputStream.WriteByte(0x0A); // LF 
                             break;
                     }

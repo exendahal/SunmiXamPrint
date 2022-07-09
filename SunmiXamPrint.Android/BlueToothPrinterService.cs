@@ -16,7 +16,6 @@ namespace SunmiXamPrint.Droid
         public BlueToothPrinterService()
         {
         }
-
         public List<BluetoothDeviceInfo> GetAvailableDevices()
         {
             BluetoothManager bluetoothManager = (BluetoothManager)currentContext.GetSystemService(Context.BluetoothService);
@@ -68,14 +67,14 @@ namespace SunmiXamPrint.Droid
         }
         public void PrintQR(string content)
         {
-            SendCommandToPrinter("qr", content, _connectedDevice);
+            SendCommandToPrinter(ContentType.TextContentType.Qr, content, _connectedDevice);
         }
 
-        public void PrintText(string content)
+        public void PrintText(string content, ContentType.TextContentType type)
         {
-            SendCommandToPrinter("plain", content, _connectedDevice);
+            SendCommandToPrinter(type, content, _connectedDevice);
         }
-        async void SendCommandToPrinter(string type, string content, BluetoothDevice device)
+        async void SendCommandToPrinter(ContentType.TextContentType type, string content, BluetoothDevice device)
         {
             if (string.IsNullOrEmpty(content)) return;
             Printer print = new Printer();
@@ -97,5 +96,6 @@ namespace SunmiXamPrint.Droid
             }
             return false;
         }
+        
     }
 }

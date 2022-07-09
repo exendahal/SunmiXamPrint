@@ -46,8 +46,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
-    <Reference Include="SunmiV2">
-      <HintPath>..\..\..\..\Downloads\SunmiV2.dll</HintPath>
+    <Reference Include="printerlibrary-1.0.18">
+      <HintPath>..\..\..\..\OneDrive\Desktop\printerlibrary-1.0.18.dll</HintPath>
+    </Reference>
+    <Reference Include="sunmiui-1.1.27">
+      <HintPath>..\dll\sunmiui-1.1.27.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,12 +62,16 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
+    <PackageReference Include="Xamarin.IDTech.SunmiCommLib">
+      <Version>1.0.0.4</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="BlueToothPrinterService.cs" />
     <Compile Include="PrinterService.cs" />
+    <Compile Include="PrintHelper.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -94,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SunmiXamPrint\SunmiXamPrint.csproj">
-      <Project>{A46E2328-33D9-4768-ABB5-3518FF75353F}</Project>
+      <Project>{4113AEFD-41D6-4D76-847F-427922FDE7B7}</Project>
       <Name>SunmiXamPrint</Name>
     </ProjectReference>
   </ItemGroup>
