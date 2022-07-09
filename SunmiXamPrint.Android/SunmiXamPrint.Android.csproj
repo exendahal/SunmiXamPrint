@@ -46,12 +46,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
-    <Reference Include="printerlibrary-1.0.18">
-      <HintPath>..\..\..\..\OneDrive\Desktop\printerlibrary-1.0.18.dll</HintPath>
-    </Reference>
-    <Reference Include="sunmiui-1.1.27">
-      <HintPath>..\dll\sunmiui-1.1.27.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -70,8 +64,6 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="BlueToothPrinterService.cs" />
-    <Compile Include="PrinterService.cs" />
-    <Compile Include="PrintHelper.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

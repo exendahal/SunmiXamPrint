@@ -15,8 +15,8 @@ namespace SunmiXamPrint
             InitializeComponent();
         }
         private async void selectPrinterButton_Clicked(object sender, EventArgs e)
-        {
-            if (DeviceInfo.Platform.ToString() == "Android")
+        {           
+            if (DeviceInfo.Platform.ToString() == "Android" && DeviceInfo.Model.ToString() =="V2" )
             {
                 if (DependencyService.Get<IBluetoothPrinterService>().IsBluetoothEnabled())
                 {
@@ -60,7 +60,11 @@ namespace SunmiXamPrint
                 e.CenterAlign(),
                 e.PrintLine("Address : Sankhamul,Kathmandu"),
                 e.PrintLine("Mobile: 9800000000"),
-                e.PrintLine("...........................")
+                e.PrintLine("................................."),
+                e.SetStyles(PrintStyle.Bold),
+                e.PrintLine("S.N  Description       Qty.  Rs."),
+                e.SetStyles(PrintStyle.None),
+                e.PrintLine(".................................")
                 );
 
             DependencyService.Get<IBluetoothPrinterService>().PrintText(buffer);           
