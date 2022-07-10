@@ -9,6 +9,8 @@ namespace SunmiXamPrint.Interfaces
         List<BluetoothDeviceInfo> GetAvailableDevices();
         bool SetCurrentDevice(string printerName);
         void PrintText(byte[] data);
+        void Print(byte[] data);
+        void PrintQR(List<byte> bytes);
         void PrintQR(string content);
         bool IsBluetoothEnabled();
 

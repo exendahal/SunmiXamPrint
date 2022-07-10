@@ -65,6 +65,7 @@ namespace SunmiXamPrint.Droid
             }
             return false;
         }
+        
         public async void PrintQR(string content)
         {
             if (string.IsNullOrEmpty(content)) return;
@@ -94,6 +95,7 @@ namespace SunmiXamPrint.Droid
                 throw new Exception("No selected device.");
             }
         }        
+       
         public bool IsBluetoothEnabled()
         {
             try
@@ -118,6 +120,31 @@ namespace SunmiXamPrint.Droid
                 return false;
             }
         }
-        
+
+        public void Print(byte[] data)
+        {
+            var btAdapter = BluetoothUtil.GetBTAdapter();
+            var status = IsBluetoothEnabled();
+            if (status)
+            {
+                var device = BluetoothUtil.GetDevice(btAdapter);
+                var socket = BluetoothUtil.GetSocket(device);
+                BluetoothUtil.PrintData(data, socket);
+            }
+            
+        }
+
+        public async void PrintQR(List<byte> bytes)
+        {
+            var btAdapter = BluetoothUtil.GetBTAdapter();
+            var status = IsBluetoothEnabled();
+            if (status)
+            {
+                var device = BluetoothUtil.GetDevice(btAdapter);
+                var socket = BluetoothUtil.GetSocket(device);
+                await BluetoothUtil.PrintQR(bytes, socket);
+            }
+           
+        }
     }
 }

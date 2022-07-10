@@ -1,46 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SunmiXamPrint.MainPage">
+             x:Class="SunmiXamPrint.MainPage"
+             Title="Bluetooth Printer Demo">
 
-    <StackLayout Margin="20, 0, 20, 0"
-                 VerticalOptions="CenterAndExpand">
-        <StackLayout Margin="0, 0, 0, 50"
-                     Orientation="Horizontal"
-                     HorizontalOptions="FillAndExpand"
-                     Spacing="20">
-            <Entry x:Name="printerNameEntry"
-                   HorizontalOptions="Start"
-                   IsReadOnly="True"
-                   Placeholder="Please select printer.">
-            </Entry>
-            <Button x:Name="selectButton"
-                    Text="Select"
-                    Clicked="selectPrinterButton_Clicked"
-                    VerticalOptions="Center"></Button>
+    <Grid>
+        <StackLayout Margin="20, 0, 20, 0"
+                     VerticalOptions="CenterAndExpand">
+
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center">
+                <Label Text="SUNMI V2"
+                       TextColor="{StaticResource PrimaryColor}"
+                       FontSize="32"
+                       HorizontalTextAlignment="Center"></Label>
+
+                <Label Text="Printer"
+                       TextColor="{StaticResource PrimaryColor}"
+                       FontSize="22"
+                       VerticalTextAlignment="End"
+                       HorizontalTextAlignment="Center"></Label>
+            </StackLayout>
+
+            <Label Text="This demo shows text, Bar code and QR print over bluetooth. This is tested on Sunmi V2. If you want to print using any of the available buetooth printer, click on select printer option."
+                   FontSize="18"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="Start"></Label>
+
+            <Grid Margin="0,12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button Text="Print Text"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Clicked="printTextButton_Clicked"
+                        BackgroundColor="{StaticResource SecondryColor}"
+                        TextColor="White"
+                        IsEnabled="True"></Button>
+
+                <Button Text="Print QR"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Clicked="printQrButton_Clicked"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        IsEnabled="True"></Button>
+
+
+                <Button Text="Print Bar Code"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Clicked="printBarCode_Clicked"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        TextColor="White"
+                        IsEnabled="True"></Button>
+
+                <Button Text="Select Printer"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Clicked="selectPrinter_Clicked"
+                        BackgroundColor="{StaticResource SecondryColor}"
+                        TextColor="White"
+                        IsEnabled="True"></Button>
+            </Grid>
+
         </StackLayout>
-        <Label Text="Text for print." />
-        <Editor x:Name="printBox"
-                Text="This is sample text."
-                Placeholder="Input text here (120 characters max)"
-                MaxLength="120"
-                AutoSize="TextChanges"
-                HorizontalOptions="FillAndExpand"></Editor>
-        <StackLayout Orientation="Horizontal"
-                     HorizontalOptions="Center"
-                     Margin="0, 20, 0, 0"
-                     Spacing="20">
-            <Button x:Name="printQrButton"
-                    Text="Print QR"
-                    Clicked="printQrButton_Clicked"
-                    WidthRequest="150"
-                    IsEnabled="False"></Button>
-            <Button x:Name="printTextButton"
-                    Text="Print Text"
-                    Clicked="printTextButton_Clicked"
-                    WidthRequest="150"
-                    IsEnabled="False"></Button>
-        </StackLayout>
-    </StackLayout>
+
+        <Label Text="&lt;github.com/exendahal/&gt;" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" Margin="12" TextColor="Gray" FontSize="8"></Label>
+    </Grid>
+   
 
 </ContentPage>

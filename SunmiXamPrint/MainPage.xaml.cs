@@ -2,8 +2,7 @@
 using ESCPOS_NET.Utilities;
 using SunmiXamPrint.Interfaces;
 using System;
-using System.Linq;
-using Xamarin.Essentials;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace SunmiXamPrint
@@ -13,40 +12,23 @@ namespace SunmiXamPrint
         public MainPage()
         {
             InitializeComponent();
-        }
-        private async void selectPrinterButton_Clicked(object sender, EventArgs e)
-        {           
-            if (DeviceInfo.Platform.ToString() == "Android" && DeviceInfo.Model.ToString() =="V2" )
-            {
-                if (DependencyService.Get<IBluetoothPrinterService>().IsBluetoothEnabled())
-                {
-                    var devices = DependencyService.Get<IBluetoothPrinterService>().GetAvailableDevices();
-                    if (devices != null && devices.Count > 0)
-                    {
-                        var choices = devices.Select(d => d.Title).ToArray();
-                        string action = await Application.Current.MainPage.DisplayActionSheet("Select printer device.", "Cancel", null, choices);
-                        if (choices.Contains(action))
-                        {
-                            SelectDevice(action);
-                        }
-                    }
-                    else
-                    {
-                        await DisplayAlert("Select Printer", "No device.", "OK");
-                    }
-                }
-                else
-                {
-                    await DisplayAlert("No bluetooth", "Please turn bluetooth on", "OK");
-                }
-            }
-            
-            
-        }
+        }     
 
         private void printQrButton_Clicked(object sender, EventArgs e)
         {
-            DependencyService.Get<IBluetoothPrinterService>().PrintQR(printBox.Text);
+            byte[] qrBytes = System.Text.Encoding.ASCII.GetBytes("This is QR");
+            int dataLength = qrBytes.Length + 3;
+            byte dataPL = (byte)(dataLength % 256);
+            byte dataPH = (byte)(dataLength / 256);
+            var bytes = new List<byte>();
+
+            bytes.AddRange(new byte[] { 0x1D, 0x28, 0x6B, 0x04, 0x00, 0x31, 0x41, 0x32, 0x00 }); // Select model
+            bytes.AddRange(new byte[] { 0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x43, 0x08 });  // Set module size (8)
+            bytes.AddRange(new byte[] { 0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x45, 0x30 });  // Set error correction
+            bytes.AddRange(new byte[] { 0x1D, 0x28, 0x6B, dataPL, dataPH, 0x31, 0x50, 0x30 }); // Start store qr data.
+            bytes.AddRange(qrBytes);
+            bytes.AddRange(new byte[] { 0x1D, 0x28, 0x6B, 0x03, 0x00, 0x31, 0x51, 0x30 }); // Print qr data from previous 80 code.
+            DependencyService.Get<IBluetoothPrinterService>().PrintQR(bytes);
         }
 
         private void printTextButton_Clicked(object sender, EventArgs args)
@@ -66,21 +48,24 @@ namespace SunmiXamPrint
                 e.SetStyles(PrintStyle.None),
                 e.PrintLine(".................................")
                 );
-
-            DependencyService.Get<IBluetoothPrinterService>().PrintText(buffer);           
+            DependencyService.Get<IBluetoothPrinterService>().Print(buffer);           
         }
 
-        void SelectDevice(string printerName)
+        private void printBarCode_Clicked(object sender, EventArgs args)
         {
-            if (DependencyService.Get<IBluetoothPrinterService>().SetCurrentDevice(printerName))
-            {
-                var current = DependencyService.Get<IBluetoothPrinterService>().GetCurrentDevice();
-                if (current != null)
-                {
-                    printerNameEntry.Text = current.Title;
-                    printQrButton.IsEnabled = printTextButton.IsEnabled = true;
-                }
-            }
+            var e = new EPSON();
+            var buffer = ByteSplicer.Combine(
+                e.CenterAlign(),               
+                e.SetBarcodeHeightInDots(48), 
+                e.PrintBarcode(BarcodeType.CODE39, "ABC"), 
+                e.PrintLine("")                
+                );
+            DependencyService.Get<IBluetoothPrinterService>().Print(buffer);
+        }
+
+        private async void selectPrinter_Clicked(object sender, EventArgs args)
+        {
+            await Navigation.PushAsync(new SelectPrinter());
         }
 
     }
