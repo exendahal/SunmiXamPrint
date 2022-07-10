@@ -96,12 +96,27 @@ namespace SunmiXamPrint.Droid
         }        
         public bool IsBluetoothEnabled()
         {
-            BluetoothManager bluetoothManager = (BluetoothManager)currentContext.GetSystemService(Context.BluetoothService);
-            if (bluetoothManager.Adapter != null && bluetoothManager.Adapter.IsEnabled)
+            try
             {
-                return true;
+                BluetoothManager bluetoothManager = (BluetoothManager)currentContext.GetSystemService(Context.BluetoothService);
+                if (bluetoothManager.Adapter != null && bluetoothManager.Adapter.IsEnabled)
+                {
+                    return true;
+                }
+                else
+                {
+                    bluetoothManager.Adapter.Enable();
+                    while (!bluetoothManager.Adapter.IsEnabled)
+                    {
+                        System.Threading.Thread.Sleep(30);
+                    }
+                    return true;
+                }
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         
     }
